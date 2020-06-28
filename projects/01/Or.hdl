@@ -1,0 +1,28 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Or.hdl
+
+ /**
+ * Or gate:
+ * out = 1 if (a == 1 or b == 1)
+ *       0 otherwise
+有一出一
+如何用Nand出一呢
+有0才行
+把一变为0
+逆推的思想
+ */
+
+CHIP Or {
+    IN a, b;
+    OUT out;
+
+    PARTS:
+    // Put your code here:
+Nand(a=a, b=a, out=w1);
+Nand(a=b, b=b, out=w2);
+Nand(a=w1, b=w2, out=out);
+//这个out有来头啊
+//a,b从右往左赋值，out从左往右赋值
+}
