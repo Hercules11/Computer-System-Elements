@@ -17,4 +17,10 @@ CHIP DMux4Way {
 
     PARTS:
     // Put your code here:
+//DMux(in=in, sel=sel[0], a=a, b=b); 有点难度，逆向思维
+//DMux(in=in, sel=sel[0], a=c, b=d);
+    DMux(in=in,  sel=sel[1], a=wab, b=wcd);
+    DMux(in=wab, sel=sel[0], a=a,   b=b);
+    DMux(in=wcd, sel=sel[0], a=c,   b=d);
+
 }

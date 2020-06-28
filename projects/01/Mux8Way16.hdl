@@ -8,6 +8,14 @@
  * out = a if sel == 000
  *       b if sel == 001
  *       etc.
+a000
+b001
+c010
+d011
+e100
+f101
+g110
+h111
  *       h if sel == 111
  */
 
@@ -19,4 +27,9 @@ CHIP Mux8Way16 {
 
     PARTS:
     // Put your code here:
+Mux4Way16(a=a, b=b, c=c, d=d, sel=sel[0..1], out=wabcd);
+Mux4Way16(a=e, b=f, c=g, d=h, sel=sel[0..1], out=wefgh);
+
+Mux16(a=wabcd, b=wefgh, sel=sel[2], out=out);
+
 }

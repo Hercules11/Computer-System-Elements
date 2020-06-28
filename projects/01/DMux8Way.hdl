@@ -17,4 +17,8 @@ CHIP DMux8Way {
 
     PARTS:
     // Put your code here:
+DMux(in=in, sel=sel[2], a=wabcd, b=wefgh);
+//完结，撒花，好好体会这种分而治之的思想
+DMux4Way(in=wabcd, sel=sel[0..1], a=a, b=b, c=c, d=d);
+DMux4Way(in=wefgh, sel=sel[0..1], a=e, b=f, c=g, d=h);
 }

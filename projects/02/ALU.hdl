@@ -43,5 +43,36 @@ CHIP ALU {
 
     PARTS:
    // Put you code here:
-ALU(x= ,y= ,zx= ,nx= ,zy= ,ny= ,f= ,no= ,out= ,zr= ,ng= ) 
+//可以考虑用输入参数，和控制码进行操作，这样的话要考虑正反两种情况对参数值的改变
+//也可以用sel进行选择性输出，这样简单一些(Mux的应用，学习卡特图)
+And16(a=x, b=false, out=outzx);
+Mux16(a=x, b=outzx, sel=zx, out=rzx); //直接改为0就可以了，我还傻乎乎地搞了一通操作
+Not16(in=rzx, out=outrnx);
+Mux16(a=rzx, b=outrnx, sel=nx, out=rnx);
+
+And16(a=y, b=false, out=outzy);
+Mux16(a=y, b=outzy, sel=zy, out=rzy);
+Not16(in=rzy, out=outrny);
+Mux16(a=rzy, b=outrny, sel=ny, out=rny);
+
+Add16(a=rnx, b=rny, out=r1);
+And16(a=rnx, b=rny, out=r2);
+Mux16(a=r2, b=r1, sel=f, out=r12);
+
+
+Not16(in=r12, out=nr12);
+Mux16(a=r12, b=nr12, sel=no, out=out, out[15]=ng,out[0..7]=outlo,out[8..15]=outhi);
+//大概是值已经输出去了，不能再转回来？此处存疑
+//There is an error ,cant connect to gate's part. Maybe the value cant trans here.
+Or8Way(in=outlo, out=ror1);
+Or8Way(in=outhi, out=ror2);
+Or(a=ror1, b=ror2, out=ror);
+Not(in=ror, out=zr);
+
+//Mux16(a=postfunc,b=notpostfunc,sel=no,out=out,out[15]=ng, out[0..7]=outlo,out[8..15]=outhi);
+
+//There is an error ,cant connect to gate's part. Maybe the value cant trans here.
+//And(a=out[15], b=true, out=ng); 
+//直接输出out[15]即可
+
 }
