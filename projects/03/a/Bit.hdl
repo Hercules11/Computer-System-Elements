@@ -15,4 +15,9 @@ CHIP Bit {
 
     PARTS:
     // Put your code here:
+//how to express the time function? 
+//use the DFF chip ,focus on the input & output . Page43
+//When load=1 then out=in naturally and there is a timeout. When load=0 then out=out(last out value) and there is also a timeout.
+Mux(a=loopback, b=in, sel=load, out=r1);
+DFF(in=r1, out=loopback, out=out);
 }
