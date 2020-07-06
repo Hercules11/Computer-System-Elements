@@ -14,7 +14,22 @@
 CHIP PC {
     IN in[16],load,inc,reset;
     OUT out[16];
-
     PARTS:
     // Put your code here:
+/*错误做法，先Register，导致不同寄存器值的优先即不一样
+Register(in=in, load=load, out=out1);
+Register(in=false, load=reset, out=out2);
+Add16(a=in, b=true, out=out3);
+Register(in=out3, load=inc, out=out4);
+单个寄存器值生成循环
+*/
+   // Inc 先执行的优先级最小
+    Inc16(in=lastval, out=incremented);
+    Mux16(a=lastval, b=incremented, sel=inc, out=w1);
+    // Load
+    Mux16(a=w1, b=in, sel=load, out=w2);
+    // Reset
+    Mux16(a=w2, b=false, sel=reset, out=w3);        
+    Register(in=w3, load=true, out=out, out=lastval);
+
 }
