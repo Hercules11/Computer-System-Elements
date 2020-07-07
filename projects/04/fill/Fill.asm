@@ -12,3 +12,64 @@
 // the screen should remain fully clear as long as no key is pressed.
 
 // Put your code here.
+
+(START)
+    @SCREEN       // ScreenEnd = SCREEN + 8192
+    D = A
+    @8192         
+    D = D + A
+    @Screen_End
+    M = D
+
+    @Color
+    M = 0
+
+(RESET_ITER)
+
+    @SCREEN       // pIter = SCREEN
+    D = A
+    @pIter
+    M=D
+
+(DECIDE)
+    @KBD
+    D = M
+    @SET_BLACK
+    D;JGT
+
+(SET_WHITE)
+    @Color
+    M = 0
+    @DRAW
+    0;JMP    
+
+(SET_BLACK)
+    @Color
+    M = -1
+    @DRAW
+    0;JMP    
+
+(DRAW)
+    
+    @Screen_End    // If ScreenEnd - pIter <= 0 GOTO END
+    D = M
+    @pIter
+    D = D - M
+    @RESET_ITER
+    D;JLE
+
+    @Color
+    D = M
+    @pIter         // M[pIter] = -1
+    A = M
+    M = D
+
+    @pIter
+    M = M + 1
+
+    @DECIDE          // GOTO DECIDE
+    0;JMP
+
+(END)
+   @END
+   0;JMP
