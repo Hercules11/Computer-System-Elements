@@ -20,4 +20,9 @@ CHIP Computer {
 
     PARTS:
     // Put your code here:
+//按图索骥，不懂原理
+CPU(inM=amout ,instruction=addout ,reset=reset ,outM=outm ,writeM=loadm ,addressM=addam ,pc=pcout );
+ROM32K(address=pcout ,out=addout );
+Memory(in=outm ,load=loadm ,address=addam ,out=amout );
+
 }

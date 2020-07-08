@@ -8,7 +8,7 @@
  * two registers named A and D, and a program counter named PC.
  * The CPU is designed to fetch and execute instructions written in 
  * the Hack machine language. In particular, functions as follows:
- * Executes the inputted instruction according to the Hack machine 
+ * Ex+-ecutes the inputted instruction according to the Hack machine 
  * language specification. The D and A in the language specification
  * refer to CPU-resident registers, while M refers to the external
  * memory location addressed by A, i.e. to Memory[A]. The inM input 
@@ -39,5 +39,89 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
+//水平不够啊，还是要一步一步来
     // Put your code here:
+    // Decode the instruction into component parts命令解码
+    Or16(a           = instruction, 
+         out[15]     = cinstruction, 
+         out[12]     = aorm,
+         out[11]     = czx,
+         out[10]     = cnx,
+         out[9]      = czy,
+         out[8]      = cny,
+         out[7]      = cf,
+         out[6]      = cno,
+         out[5]      = sa,
+         out[4]      = sd,
+         out[3]      = sm,
+         out[2]      = jumpneg,
+         out[1]      = jumpzero,
+         out[0]      = jumppos);
+//居然可以这样
+
+    Not(in = cinstruction, out = ainstruction);
+
+    // I control bit - A instruction or a C instruction
+    Mux16(a = instruction, b = aluout, sel = cinstruction, out = ain);
+
+    // Load register A
+    Or(a = ainstruction, b = storea, out = loadA);
+    ARegister(in = ain, load = loadA, out = areg, out[0..14] = addressM);
+
+    // A control bit - use A or M
+    Mux16(a = areg, b = inM, sel = aorm, out = am);
+
+    // ALU - C control bits
+    ALU(x  = dreg,
+        y  = am,
+        zx = czx,
+        nx = cnx,
+        zy = czy,
+        ny = cny,
+        f  = cf,
+        no = cno,
+        out = aluout,
+        out = outM,
+        zr  = aluzero,
+        ng  = aluneg);
+
+    // If it is an a-instruction don't store anything and don't jump anywhere
+    And(a = cinstruction, b = sa, out = storea);
+    And(a = cinstruction, b = sd, out = stored);
+    And(a = cinstruction, b = sm, out = storem);
+
+    //
+    // STORING ALU OUTPUT - D control bits
+    // Logic to store A is above
+    //
+
+    // If cd[0] write to memory
+    And(a = storem, b = true, out = writeM);
+
+    // If cd[1] write to d
+    And(a = stored, b = true, out = loadD);
+    DRegister(in = aluout, load = loadD, out = dreg);
+
+    //
+    // JUMPING AND THE PC - J control bits
+    //
+
+    Or(a = aluneg, b = aluzero, out = alunegorzero);
+    Not(in = alunegorzero, out = alupos);
+
+    And(a = aluneg, b = jumpneg, out = shouldjumplt);
+    And(a = aluzero, b = jumpzero, out = shouldjumpzero);
+    And(a = alupos, b = jumppos, out = shouldjumppos);
+
+    Or(a = shouldjumplt, b = shouldjumpzero, out = shouldjumpparta);
+    Or(a = shouldjumpparta, b = shouldjumppos, out = jump);    
+    And(a = jump, b = cinstruction, out = shouldjump);
+
+    PC(in = areg, 
+       load = shouldjump,
+       inc = true,
+       reset = reset,
+       out = deleteme,
+       out[0..14] = pc);  // Is this right?
+
 }
