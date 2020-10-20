@@ -1,5 +1,3 @@
-# computer_system_elements
-computer_system_elements's project
-keep learning computer science, cs;
-keep thinking for life;
-keep it.
+# Computer System Elements [官网](https://www.nand2tetris.org//)
+
+### finished the first part of book
