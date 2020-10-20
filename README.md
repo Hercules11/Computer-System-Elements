@@ -5,10 +5,14 @@
 
 
 后排复习一下markdown syntax:
+
 https://guides.github.com/features/mastering-markdown/
 
+
 this is a text:
-Always be god![link to Google!](http://google.com)
+
+Always be god! [link to Google!](http://google.com)
+
 
 this is a list:
 1. One
@@ -16,7 +20,8 @@ this is a list:
 3. Three
 
 this is a image：
-！[beauty](https://www.adaymag.com/wp-content/uploads/2019/03/adaymag-stefanie-sun-01-770x461.jpg)
+
+![beauty](https://www.adaymag.com/wp-content/uploads/2019/03/adaymag-stefanie-sun-01-770x461.jpg)
 
 this is a header:
 # 一号
