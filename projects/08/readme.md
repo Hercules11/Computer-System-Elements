@@ -1,7 +1,9 @@
 命令行运行：
 
+single file
+
 > python vmtrans.py FibonacciSeries.vm
 
-or
+dir
 
 > python Multitrans.py ProgramFlow\FibonacciSeries
