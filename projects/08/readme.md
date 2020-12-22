@@ -1,4 +1,4 @@
-注意: 生成unique label
+命令行运行：
 
 > python vmtrans.py FibonacciSeries.vm
 
