@@ -1,0 +1,68 @@
+/**
+ * A SnakeGame Object, which includes snake-body and snake-square.
+ * The snake-qsuare appears in the interface randomly except the area where snake-body.
+ * THe Snake-body consists of three squares, move to right originally.
+ * Snake-body's head can be controlled by user in keyboard. And the rest of body follow the trace
+ * of head.
+ * Whatever the difficulties you encountered, please code continually.
+ * 请一直写下去， 克服困难
+ */
+
+ class SnakeGame {
+    field int direction; // the direction of snake move.
+   //  field Square square; // the food of snake.
+    field Snake snake; // A array of square, repr the snake's body
+
+   /** Constructs a new Snake Game. */
+   constructor SnakeGame new() {
+      // Creates a 30 by 30 pixels square and positions it at the top-left
+      // of the screen.
+      let snake = Snake.new(232, 120, 16);
+      let direction = 4;  // initial state is move to right
+      return this;
+   }
+
+   /** Disposes this game. */
+   method void dispose() {
+      do snake.dispose();
+      do Memory.deAlloc(this);
+      return;
+   }
+
+   /** Moves the square in the current direction. */
+   method void moveSnake() {
+      if (direction = 1) { do snake.moveUp(); }
+      if (direction = 2) { do snake.moveDown(); }
+      if (direction = 3) { do snake.moveLeft(); }
+      if (direction = 4) { do snake.moveRight(); }
+      do Sys.wait(5);  // delays the next movement
+      return;
+   }
+
+   /** Runs the game: handles the user's inputs and moves the square accordingly */
+   method void run() {
+      var char key;  // the key currently pressed by the user
+      var boolean exit;
+      let exit = false;
+
+      while (~exit) {
+         // waits for a key to be pressed
+         while (key = 0) {
+            let key = Keyboard.keyPressed();
+            do moveSnake();
+         }
+         if (key = 81)  { let exit = true; }     // q key
+         if (key = 131) { let direction = 1; }   // up arrow
+         if (key = 133) { let direction = 2; }   // down arrow
+         if (key = 130) { let direction = 3; }   // left arrow
+         if (key = 132) { let direction = 4; }   // right arrow
+
+         // waits for the key to be released
+         while (~(key = 0)) {
+            let key = Keyboard.keyPressed();
+            do moveSnake();
+         }
+     } // while
+     return;
+   }
+ }

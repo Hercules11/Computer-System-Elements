@@ -42,6 +42,7 @@ class SquareGame {
       if (direction = 3) { do square.moveLeft(); }
       if (direction = 4) { do square.moveRight(); }
       do Sys.wait(5);  // delays the next movement
+      // 这里我们可以看到，如果我们不会站在别人肩膀上砥砺前行，就会陷入无休止的细节问题中去。
       return;
    }
 

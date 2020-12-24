@@ -1,9 +1,10 @@
 import sys
 
-# usage example:
+# 使用方法:
 # python asm.py max/Max.asm
 # python asm.py pong/Pong.asm
 # python asm.py rect/Rect.asm
+
 # read path/file, relative path. eg. add/Add.asm
 fileName = sys.argv[1]
 fileHandle = open(fileName, 'r')
