@@ -1,68 +1,114 @@
-/**
- * A SnakeGame Object, which includes snake-body and snake-square.
- * The snake-qsuare appears in the interface randomly except the area where snake-body.
- * THe Snake-body consists of three squares, move to right originally.
- * Snake-body's head can be controlled by user in keyboard. And the rest of body follow the trace
- * of head.
- * Whatever the difficulties you encountered, please code continually.
- * 请一直写下去， 克服困难
- */
+class SnakeGame
+{
+	field SnakeChunk head;
+	field Fruit fruit;
+	field int direction, score;
 
- class SnakeGame {
-    field int direction; // the direction of snake move.
-   //  field Square square; // the food of snake.
-    field Snake snake; // A array of square, repr the snake's body
+	//initialize snake location and set direction to zero
+	constructor SnakeGame new()
+	{
+		//start head in the middle of the screen
+		let head = SnakeChunk.new(254, 126);
 
-   /** Constructs a new Snake Game. */
-   constructor SnakeGame new() {
-      // Creates a 30 by 30 pixels square and positions it at the top-left
-      // of the screen.
-      let snake = Snake.new(232, 120, 16);
-      let direction = 4;  // initial state is move to right
-      return this;
-   }
+		let fruit = Fruit.new();
 
-   /** Disposes this game. */
-   method void dispose() {
-      do snake.dispose();
-      do Memory.deAlloc(this);
-      return;
-   }
+		let score = 0;
 
-   /** Moves the square in the current direction. */
-   method void moveSnake() {
-      if (direction = 1) { do snake.moveUp(); }
-      if (direction = 2) { do snake.moveDown(); }
-      if (direction = 3) { do snake.moveLeft(); }
-      if (direction = 4) { do snake.moveRight(); }
-      do Sys.wait(5);  // delays the next movement
-      return;
-   }
+		//snake head is stationary to begin
+		let direction = 0;
+		return this;
+	}
 
-   /** Runs the game: handles the user's inputs and moves the square accordingly */
-   method void run() {
-      var char key;  // the key currently pressed by the user
-      var boolean exit;
-      let exit = false;
 
-      while (~exit) {
-         // waits for a key to be pressed
-         while (key = 0) {
-            let key = Keyboard.keyPressed();
-            do moveSnake();
-         }
-         if (key = 81)  { let exit = true; }     // q key
-         if (key = 131) { let direction = 1; }   // up arrow
-         if (key = 133) { let direction = 2; }   // down arrow
-         if (key = 130) { let direction = 3; }   // left arrow
-         if (key = 132) { let direction = 4; }   // right arrow
+	//jack specific method for cleaning up memory
+	method void dispose()
+	{
+		do head.dispose();
+		do fruit.dispose();
+		do Memory.deAlloc(this);
+		return;
+	}
 
-         // waits for the key to be released
-         while (~(key = 0)) {
-            let key = Keyboard.keyPressed();
-            do moveSnake();
-         }
-     } // while
-     return;
-   }
- }
+
+	//run game method
+	method void Run()
+	{
+		var char key;
+		var int oldDirection;
+		var boolean exit;
+		let exit = false;
+
+		while(~exit)
+		{
+			while ((key = 0) & (~exit))
+			{
+				//wait for new keyboard input
+            	let key = Keyboard.keyPressed();
+
+            	//check to see if snake head has contacted fruit
+				if(fruit.resetFruitPos(head.getX(), head.getY()))
+				{
+					//add a peice to tail if snake eats fruit
+					do head.addTail();
+
+					//increment score
+					let score = score + 1;
+				}
+
+            	//check to see if head has contacted wall or tail
+            	let exit = head.moveChunk(direction);
+
+				do Sys.wait(10);
+         	}
+
+         	//exit
+			if (key = 81)
+			{
+				let exit = true;
+			}
+
+			//up
+			if  ((key = 131) & (~(oldDirection = 2)))
+			{
+				let direction = 1;
+			}
+
+			//down
+         	if ((key = 133) & (~(oldDirection = 1)))
+			{
+				let direction = 2;
+			}
+
+			//left
+         	if ((key = 130) & (~(oldDirection = 4)))
+			{
+				let direction = 3;
+			}
+
+			//right
+         	if ((key = 132) & (~(oldDirection = 3)))
+			{
+				let direction = 4;
+			}
+
+			let oldDirection = direction;
+			let key = 0;
+		}
+		return;
+	}
+
+	//print the score at the end of the game
+	method void Stats()
+	{
+		var String s;
+		let s = "Score: ";
+
+		do Screen.clearScreen();
+
+		do Output.printString(s);
+
+		do Output.printInt(score);
+
+		return;
+	}
+}

@@ -1,0 +1,268 @@
+class SnakeChunk
+{
+	field int x, y, oldX, oldY, size, tailCount;
+	field Array tailX, tailY;
+
+	constructor SnakeChunk new(int nextx, int nexty)
+	{
+		//start head in midle
+		let x = nextx;
+		let y = nexty;
+
+		//no tail to start
+		let tailCount = 0;
+
+		//size of head is 4 pixels
+		let size = 4;
+
+		//initialize array with 500 elements for tail coords
+		let tailX = Array.new(500);
+		let tailY = Array.new(500);
+
+		do draw();
+
+		return this;
+	}
+
+	method void dispose()
+	{
+		do tailX.dispose();
+		do tailY.dispose();
+        do Memory.deAlloc(this);
+      	return;
+   	}
+
+   	//general rectangle drawing function
+	method void draw()
+	{
+		//set pixel color to black
+        do Screen.setColor(true);
+
+        //(top left x, top left y, width, hieght)
+        do Screen.drawRectangle(x, y, x + size, y + size);
+
+      	return;
+  	}
+
+	method int getX()
+	{
+		return x;
+	}
+
+	method int getY()
+	{
+		return y;
+	}
+
+	//adds a tail piece
+	method void addTail()
+	{
+		let tailCount = tailCount + 1;
+		return;
+	}
+
+	//draws tail
+	method void drawTail(int oldX, int oldY)
+	{
+		var int prevX, prevY, prev2X, prev2Y, iterator;
+		let iterator = 0;
+
+		//hold first coord in temp var
+		let prevX = tailX[0];
+		let prevY = tailY[0];
+
+		//first tail piece in old head location
+		let tailX[0] = oldX;
+		let tailY[0] = oldY;
+
+		//repeat process for all tail pieces
+		while(iterator < tailCount)
+		{
+			//earse old tail piece
+			do Screen.setColor(false);
+         	do Screen.drawRectangle(prevX, prevY, prevX + size, prevY + size);
+
+         	//draw new tail piece in location of piece in front
+			do Screen.setColor(true);
+         	do Screen.drawRectangle(tailX[iterator], tailY[iterator], tailX[iterator] + size, tailY[iterator] + size);
+
+         	//hold coord in temp car
+			let prev2X = tailX[iterator + 1];
+			let prev2Y = tailY[iterator + 1];
+
+			//set next piece to previous piece coord
+         	let tailX[iterator + 1] = prevX;
+         	let tailY[iterator + 1] = prevY;
+
+         	//hold coord in temp var
+         	let prevX = prev2X;
+         	let prevY = prev2Y;
+
+         	let iterator = iterator + 1;
+		}
+		return;
+	}
+
+
+   	method boolean moveChunk(int direction)
+	{
+		var int iterator;
+		let iterator = 0;
+
+
+		if(direction = 1)
+		{
+      		if (y > 1)
+			{
+				//erase old head
+         		do Screen.setColor(false);
+         		do Screen.drawRectangle(x, (y + size) - 1, x + size, y + size);
+
+         		//save coords
+         		let oldX = x;
+         		let oldY = y;
+
+         		//move appropriate coord
+         		let y = y - 2;
+
+         		//draw new head
+         		do Screen.setColor(true);
+         		do Screen.drawRectangle(x, y, x + size, y + 1);
+
+         		//test for tail
+         		if(~(tailCount = 0))
+				{
+         			do drawTail(oldX, oldY);
+         		}
+
+     	 	}
+
+     	 	//test for wall contact
+			if ((y < 0) | (y = 0))
+			{
+				return true;
+			}
+
+			//test for tail contact
+			while(iterator < tailCount)
+			{
+				if((x = tailX[iterator]) & (y = tailY[iterator]))
+				{
+					return true;
+				}
+
+				let iterator = iterator + 1;
+			}
+
+			return false;
+		}
+
+		if(direction = 2)
+		{
+			if ((y + size) < 254)
+			{
+         		do Screen.setColor(false);
+         		do Screen.drawRectangle(x, y, x + size, y + 1);
+         		let oldX = x;
+         		let oldY = y;
+         		let y = y + 2;
+         		do Screen.setColor(true);
+         		do Screen.drawRectangle(x, (y + size) - 1, x + size, y + size);
+         		if(~(tailCount = 0))
+				{
+         			do drawTail(oldX, oldY);
+				}
+      		}
+
+			if (((y + size) > 254) | ((y + size) = 254))
+			{
+				return true;
+			}
+
+			while(iterator < tailCount)
+			{
+				if((x = tailX[iterator]) & (y = tailY[iterator]))
+				{
+					return true;
+				}
+
+				let iterator = iterator + 1;
+			}
+
+			return false;
+		}
+
+		if(direction = 3)
+		{
+			if (x > 1)
+			{
+         		do Screen.setColor(false);
+         		do Screen.drawRectangle((x + size) - 1, y, x + size, y + size);
+         		let oldX = x;
+         		let oldY = y;
+         		let x = x - 2;
+         		do Screen.setColor(true);
+         		do Screen.drawRectangle(x, y, x + 1, y + size);
+         		if(~(tailCount = 0))
+				{
+         			do drawTail(oldX, oldY);
+         		}
+      		}
+
+			if ((x < 0) | (x = 0))
+			{
+				return true;
+			}
+
+
+			while(iterator < tailCount)
+			{
+				if((x = tailX[iterator]) & (y = tailY[iterator]))
+				{
+					return true;
+				}
+
+				let iterator = iterator + 1;
+			}
+
+			return false;
+		}
+
+		if(direction = 4)
+		{
+			if ((x + size) < 510)
+			{
+         		do Screen.setColor(false);
+         		do Screen.drawRectangle(x, y, x + 1, y + size);
+         		let oldX = x;
+         		let oldY = y;
+         		let x = x + 2;
+         		do Screen.setColor(true);
+         		do Screen.drawRectangle((x + size) - 1, y, x + size, y + size);
+         		if(~(tailCount = 0))
+				{
+         			do drawTail(oldX, oldY);
+         		}
+      		}
+
+			if (((x + size) > 510) | ((x + size) = 510))
+			{
+				return true;
+			}
+
+			while(iterator < tailCount)
+			{
+				if((x = tailX[iterator]) & (y = tailY[iterator]))
+				{
+					return true;
+				}
+
+				let iterator = iterator + 1;
+			}
+
+			return false;
+		}
+
+		return false;
+   	}
+}

@@ -1,0 +1,71 @@
+class Fruit
+{
+	field int fruitX, fruitY;
+	field int oldFruitX, oldFruitY;
+	field int size;
+	field Random numGen;
+
+	constructor Fruit new()
+	{
+		//start fruit in quadrant 2
+		let fruitX = 127;
+  		let fruitY = 63;
+
+  		//fruit is same size as snake head
+  		let size = 4;
+
+		//initialize PRNGR
+		let numGen = Random.new();
+
+  		do drawFruit();
+
+  		return this;
+	}
+
+	method void dispose()
+	{
+			do numGen.dispose();
+        	do Memory.deAlloc(this);
+      		return;
+   	}
+
+   	method void setFruitPos()
+	{
+		//save old fruit coords
+		let oldFruitX = fruitX;
+		let oldFruitY = fruitY;
+
+		//find position of fruit relative to the position of x and y
+		let fruitX = numGen.modulusX(oldFruitX);
+		let fruitY = numGen.modulusY(oldFruitY);
+
+		do drawFruit();
+
+		return;
+	}
+
+	method void drawFruit()
+	{
+		//erase the old fruit
+	    do Screen.setColor(false);
+        do Screen.drawRectangle(oldFruitX, oldFruitY, oldFruitX + size, oldFruitY + size);
+
+        //draw the new fruit
+		do Screen.setColor(true);
+        do Screen.drawRectangle(fruitX, fruitY, fruitX + size, fruitY + size);
+      	return;
+	}
+
+	method boolean resetFruitPos(int x, int y)
+	{
+		//check to see if head is touching fruit
+		if(((fruitX > (x - 4)) & (fruitX < (x + 8))) & ((fruitY > (y - 4)) & (fruitY < (y + 8))))
+		{
+			do setFruitPos();
+
+			return true;
+		}
+
+		return false;
+	}
+}
