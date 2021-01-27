@@ -1,7 +1,7 @@
 import sys
 import random
 
-# usage example: python vmtrans.py StackArithmetic\StackTest\StackTest.vm
+
 fileName = sys.argv[1]
 newFileName = fileName.split('.')[0] + ".asm"
 

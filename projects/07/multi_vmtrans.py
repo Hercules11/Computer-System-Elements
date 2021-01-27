@@ -1,6 +1,5 @@
 import sys, os
 
-# usage example: python Multivmtrans.py StackArithmetic\StackTest
 folderName = sys.argv[1]
 files = []
 for file in os.listdir(folderName):

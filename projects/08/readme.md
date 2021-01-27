@@ -1,9 +1,9 @@
 命令行运行：
 
-single file
+if single file
 
-> python vmtrans.py FibonacciSeries.vm
+​    python vmtrans.py FibonacciSeries.vm
 
-dir
+else：
 
-> python Multitrans.py ProgramFlow\FibonacciSeries
+​    python multi_trans.py ProgramFlow\FibonacciSeries
