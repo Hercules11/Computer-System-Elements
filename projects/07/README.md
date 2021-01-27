@@ -1,9 +1,9 @@
 定位到程序所在位置，在Command Prompt窗口输入：
 
-if single file:
+`if single file:`
 
-​    python vmtrans.py StackArithmetic\StackTest\StackTest.vm
+​    `python vmtrans.py StackArithmetic\StackTest\StackTest.vm`
 
-else：
+`else：`
 
-​    python multi_vmtrans.py StackArithmetic\StackTest
+​    `python multi_vmtrans.py StackArithmetic\StackTest`
