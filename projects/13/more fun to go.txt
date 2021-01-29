@@ -7,3 +7,5 @@ We hope that you enjoyed the course!
 -- Noam and Shimon
 
 www.nand2tetris.org
+
+————I'm being on the way
