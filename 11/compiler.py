@@ -122,7 +122,7 @@ def fileTokenizer(path):
 # analyzer part ↑ ↑ ↑
 # -------------------------------------------------------------------------------------------------------
 # parser part ↓ ↓ ↓ ↓
-# 根据原书208页 Jack语法构建函数
+# 根据原书 208 页, Jack 语法规范构建函数
 #########################################################################################################
 def classCompile(tokens):
     contentList.append('  ' * len(treeStack) + "<class>")
@@ -350,7 +350,8 @@ def fileParser(path):
     toFile = open(completePath, 'w')
     # print(cleanToken)
     # classCompile(cleanToken)
-    content = codeGene.vmWriter(cleanToken)
+    codeGene.vmWriter(cleanToken)
+    content = codeGene.resultContent
     for line in content:
         toFile.write(line + '\n')
     toFile.close()
