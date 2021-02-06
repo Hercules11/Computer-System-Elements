@@ -77,6 +77,67 @@ def subroutineSymbol(tokens):
 # vmWriter Part II  ↓ ↓ ↓
 # 根据原书 208 页, Jack 语法以及 233 页的映射规范构建函数
 #######################################################################################################
+def expressionListWriter(tokens):
+    pass
+
+
+def subroutineCallWriter(tokens):
+    pass
+
+
+def termWriter(tokens):
+    unaryOp = {'-': "eq", '~': "not"}
+    if tokens[0] in unaryOp:
+        unary_op = tokens.pop(0)
+        termWriter(tokens)
+        resultContent.append(f"{unaryOp[unary_op]}")
+    elif tokens[0] == '(':
+        tokens.pop(0)  # (
+        expressionWriter(tokens)
+        tokens.pop(0)  # )
+    elif tokens[1] == '[':
+        if tokens[0] in subroutineSymbolTable["name"]:
+            varLocation = subroutineSymbolTable["name"].index(tokens[0])
+            varKind = subroutineSymbolTable['kind'][varLocation]
+            varIndex = subroutineSymbolTable['index'][varLocation]
+        else:
+            varLocation = classSymbolTable["name"].index(tokens[0])
+            varKind = classSymbolTable['kind'][varLocation]
+            varIndex = classSymbolTable['index'][varLocation]
+        tokens.pop(0)  # varName
+        resultContent.append(f"push {varKind} {varIndex}")
+        tokens.pop(0)  # [
+        expressionWriter(tokens)
+        tokens.pop(0)  # ]
+        resultContent.append("add")
+        resultContent.append("pop pointer 1")
+        expressionWriter(tokens)
+        resultContent.append("pop that 0")
+    elif tokens[1] in ['(', '.']:
+        subroutineCallWriter(tokens)
+    else:
+        pass
+
+
+def expressionWriter(tokens):
+    opList = ['+', '-', '*', '/', '&', '|', '<', '>', '=']
+    opDict = {
+        '+': "add",
+        '-': "sub",
+        '*': "call Math.multiply 2",
+        '/': "call Math.divide 2",
+        '=': "eq",
+        '<': "lt",
+        '>': "gt",
+        '&': "and",
+        '|': "or",
+    }
+    termWriter(tokens)
+    if tokens[0] in opList:
+        op = tokens.pop(0)
+        expressionWriter(tokens)
+        resultContent.append(f"{opDict[op]}")
+
 
 def returnWriter(tokens):
     tokens.pop(0)  # return
@@ -120,6 +181,31 @@ def ifWriter(tokens):
 
 def letWriter(tokens):
     tokens.pop(0)  # let
+    if tokens[0] in subroutineSymbolTable["name"]:
+        varLocation = subroutineSymbolTable["name"].index(tokens[0])
+        varKind = subroutineSymbolTable['kind'][varLocation]
+        varIndex = subroutineSymbolTable['index'][varLocation]
+        assignVal = f"pop {varKind} {varIndex}"
+    else:
+        varLocation = classSymbolTable["name"].index(tokens[0])
+        varKind = classSymbolTable['kind'][varLocation]
+        varIndex = classSymbolTable['index'][varLocation]
+        assignVal = f"pop {varKind} {varIndex}"
+    tokens.pop(0)  # varName
+    if tokens[1] == '[':
+        resultContent.append(f"push {varKind} {varIndex}")
+        tokens.pop(0)  # [
+        expressionWriter(tokens)
+        tokens.pop(0)  # ]
+        resultContent.append("add")
+        resultContent.append("pop pointer 1")
+        expressionWriter(tokens)
+        resultContent.append("pop that 0")
+    else:
+        tokens.pop(0)  # =
+        expressionWriter(tokens)
+        resultContent.append(assignVal)
+        tokens.pop(0)  # ;
 
 
 def statementsWriter(tokens):
