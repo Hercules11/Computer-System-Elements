@@ -1,0 +1,118 @@
+function Fruit.new 0
+push constant 6
+call Memory.alloc 1
+pop pointer 0
+push constant 127
+pop this 0
+push constant 63
+pop this 1
+push constant 4
+pop this 4
+call Random.new 0
+pop this 5
+push pointer 0
+call Fruit.drawFruit 1
+pop temp 0
+push pointer 0
+return
+function Fruit.dispose 0
+push argument 0
+pop pointer 0
+push this 5
+call Random.dispose 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
+function Fruit.setFruitPos 0
+push argument 0
+pop pointer 0
+push this 0
+pop this 2
+push this 1
+pop this 3
+push this 5
+push this 2
+call Random.modulusX 2
+pop this 0
+push this 5
+push this 3
+call Random.modulusY 2
+pop this 1
+push pointer 0
+call Fruit.drawFruit 1
+pop temp 0
+push constant 0
+return
+function Fruit.drawFruit 0
+push argument 0
+pop pointer 0
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push this 2
+push this 3
+push this 2
+push this 4
+add
+push this 3
+push this 4
+add
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push this 0
+push this 1
+push this 0
+push this 4
+add
+push this 1
+push this 4
+add
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+return
+function Fruit.resetFruitPos 0
+push argument 0
+pop pointer 0
+push this 0
+push argument 1
+push constant 4
+sub
+gt
+push this 0
+push argument 1
+push constant 8
+add
+lt
+and
+push this 1
+push argument 2
+push constant 4
+sub
+gt
+push this 1
+push argument 2
+push constant 8
+add
+lt
+and
+and
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+call Fruit.setFruitPos 1
+pop temp 0
+push constant 0
+not
+return
+label IF_FALSE0
+push constant 0
+return
