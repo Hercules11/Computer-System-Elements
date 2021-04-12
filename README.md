@@ -12,15 +12,21 @@ Computer System Elements [官网地址](https://www.nand2tetris.org//)
 * 算法于数据结构：堆栈、哈希表、链表、递归、算术算法、几何算法、运行效率。
 * 软件工程：模式化设计、接口与实现规范、API 设计和文档、主动式测试（极限编程理论中的单元测试）、广义的程序设计概念、质量保证体系。
 
-<figure>
-    <img src=".\images\image-20210412234739510.png" alt="Book Architecture" style="width:100%"/>
-    <figcaption align="center">全书整体组织架构</figcaption>
-</figure>
+### 全书整体组织架构
+
+> <img src=".\images\image-20210412234739510.png" alt="Book Architecture" style="width:100%"/>
 
 
 
-<figure>
-    <img src=".\images\image-20210412235008302.png" alt="Software part architecture" style="width:100%"/>
-    <figcaption align="center">书籍软件部分简介</figcaption>
-</figure>
+### 软件部分简介
+
+> <img src=".\images\image-20210412235008302.png" alt="Software part architecture" style="width:100%"/>
+
+
+
+
+
+
+
+
 
