@@ -39,9 +39,8 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-//水平不够啊，还是要一步一步来
     // Put your code here:
-    // Decode the instruction into component parts命令解码
+    // Decode the instruction into component parts
     Or16(a           = instruction, 
          out[15]     = cinstruction, 
          out[12]     = aorm,
@@ -57,7 +56,6 @@ CHIP CPU {
          out[2]      = jumpneg,
          out[1]      = jumpzero,
          out[0]      = jumppos);
-//居然可以这样
 
     Not(in = cinstruction, out = ainstruction);
 

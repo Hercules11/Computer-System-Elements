@@ -28,7 +28,7 @@ CHIP Memory {
 
     PARTS:
     // Put your code here:
-//利用地址高位，判断地址大小，妙啊啊啊啊
+//利用地址高位，判断地址大小
 //想了半天，不知道如何根据地址分发内容
 DMux4Way(in=load, sel=address[13..14], a=loadm1, b=loadm2, c=loadsrc, d=loadkbd);
 Or(a=loadm1, b=loadm2, out=loadm);
